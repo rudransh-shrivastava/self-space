@@ -1,7 +1,32 @@
-self-space-server/node_modules
-self-space-server/dist
+# Env
+self-space-client/.env
 self-space-server/.env
-self-space-server/.env.local
+# Client
+# Logs
+self-space-client/logs
+self-space-client/*.log
+self-space-client/npm-debug.log*
+self-space-client/yarn-debug.log*
+self-space-client/yarn-error.log*
+self-space-client/pnpm-debug.log*
+self-space-client/lerna-debug.log*
 
 self-space-client/node_modules
 self-space-client/dist
+self-space-client/dist-ssr
+self-space-client/*.local
+
+# Server
+self-space-server/node_modules
+self-space-server/dist
+# Editor directories and files
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
