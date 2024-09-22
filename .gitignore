@@ -1,0 +1,7 @@
+self-space-server/node_modules
+self-space-server/dist
+self-space-server/.env
+self-space-server/.env.local
+
+self-space-client/node_modules
+self-space-client/dist
