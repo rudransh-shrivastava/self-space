@@ -7,10 +7,11 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/rudransh-shrivastava/self-space/utils"
 )
 
 const BUCKETS_PATH = "buckets/"
-const BUFFER_SIZE = 50
+const BUFFER_SIZE = 9
 
 type Bucket struct {
 }
@@ -32,18 +33,18 @@ func main() {
 func (b *Bucket) upload(w http.ResponseWriter, r *http.Request) {
 	name, ok := mux.Vars(r)["name"]
 	if !ok || name == "" {
-		newErrorResponse(w, "name is required", http.StatusBadRequest)
+		utils.NewErrorResponse(w, "name is required", http.StatusBadRequest)
 		return
 	}
 	path, ok := mux.Vars(r)["path"]
 	if !ok || path == "" {
-		newErrorResponse(w, "path is required", http.StatusBadRequest)
+		utils.NewErrorResponse(w, "path is required", http.StatusBadRequest)
 		return
 	}
 
 	outFile, err := os.Create(BUCKETS_PATH + path)
 	if err != nil {
-		newErrorResponse(w, err.Error(), http.StatusInternalServerError)
+		utils.NewErrorResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer outFile.Close()
@@ -52,38 +53,34 @@ func (b *Bucket) upload(w http.ResponseWriter, r *http.Request) {
 	var totalBytes int64
 	for {
 		n, readErr := r.Body.Read(buf)
+		fmt.Printf("the buffer is %v \n", buf)
 		if readErr == io.EOF {
+			bytesWritten, err := outFile.Write(buf[:n])
+			if err != nil {
+				utils.NewErrorResponse(w, err.Error(), http.StatusInternalServerError)
+			}
+			totalBytes += int64(bytesWritten)
 			fmt.Println("reached end of file at", totalBytes)
 			break
 		}
 		if readErr != nil {
-			newErrorResponse(w, readErr.Error(), http.StatusInternalServerError)
+			utils.NewErrorResponse(w, readErr.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		bytesWritten, err := outFile.Write(buf[:n])
 
 		if err != nil {
-			newErrorResponse(w, err.Error(), http.StatusInternalServerError)
+			utils.NewErrorResponse(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		totalBytes += int64(bytesWritten)
 	}
 
 	if totalBytes == 0 {
-		newErrorResponse(w, "No data received", http.StatusBadRequest)
+		utils.NewErrorResponse(w, "No data received", http.StatusBadRequest)
 		return
 	}
 
-	newSuccessResponse(w, fmt.Sprintf("File uploaded successfully to: %s/%s with size %d", name, path, totalBytes))
-}
-
-func newErrorResponse(w http.ResponseWriter, msg string, status int) {
-	w.WriteHeader(status)
-	w.Write([]byte(msg))
-}
-
-func newSuccessResponse(w http.ResponseWriter, msg string) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(msg))
+	utils.NewSuccessResponse(w, fmt.Sprintf("File uploaded successfully to: %s/%s with size %d", name, path, totalBytes))
 }
