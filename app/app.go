@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/rudransh-shrivastava/self-space/api"
+	api "github.com/rudransh-shrivastava/self-space/api/bucket"
 	"github.com/rudransh-shrivastava/self-space/config"
 	"github.com/rudransh-shrivastava/self-space/utils"
 	"gorm.io/gorm"
