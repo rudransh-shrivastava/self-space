@@ -31,9 +31,9 @@ func (b *Bucket) Upload(w http.ResponseWriter, r *http.Request) {
 	fileName := pathArray[len(pathArray)-1]
 	filePath := strings.Join(pathArray[:len(pathArray)-1], "/")
 
-	utils.CreateDirectoryIfNotExists(config.Envs.BucketPath + filePath)
+	utils.CreateDirectoryIfNotExists(config.Envs.BucketPath + bucketName + "/" + filePath)
 
-	finalFilePath := config.Envs.BucketPath + filePath + "/" + fileName
+	finalFilePath := config.Envs.BucketPath + bucketName + "/" + filePath + "/" + fileName
 
 	outFile, err := os.Create(finalFilePath)
 	if err != nil {
