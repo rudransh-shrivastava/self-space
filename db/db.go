@@ -16,7 +16,7 @@ type Bucket struct {
 }
 
 func NewDB() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("apikeys.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

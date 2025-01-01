@@ -2,7 +2,7 @@
 tmp
 
 # sqlite db
-apikeys.db
+database.db
 
 # buckets directory
 buckets
