@@ -10,6 +10,11 @@ type ApiKey struct {
 	Key string `gorm:"unique"`
 }
 
+type Bucket struct {
+	ID   uint   `gorm:"primaryKey"`
+	Name string `gorm:"unique"`
+}
+
 func NewDB() (*gorm.DB, error) {
 	db, err := gorm.Open(sqlite.Open("apikeys.db"), &gorm.Config{})
 	if err != nil {
@@ -19,5 +24,10 @@ func NewDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = db.AutoMigrate(&Bucket{})
+	if err != nil {
+		return nil, err
+	}
+
 	return db, nil
 }
