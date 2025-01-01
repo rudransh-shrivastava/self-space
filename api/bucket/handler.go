@@ -12,12 +12,24 @@ import (
 	"github.com/rudransh-shrivastava/self-space/utils"
 )
 
-type Bucket struct{}
+type Bucket struct {
+	BucketStore *BucketStore
+}
 
 func (b *Bucket) Upload(w http.ResponseWriter, r *http.Request) {
 	bucketName, ok := mux.Vars(r)["bucketName"]
 	if !ok || bucketName == "" {
 		utils.NewErrorResponse(w, "bucket name is required", http.StatusBadRequest)
+		return
+	}
+
+	exists, err := b.BucketStore.CheckExists(bucketName)
+	if err != nil {
+		utils.NewErrorResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if !exists {
+		utils.NewErrorResponse(w, "bucket does not exist", http.StatusNotFound)
 		return
 	}
 

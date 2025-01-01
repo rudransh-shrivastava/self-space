@@ -31,3 +31,23 @@ func (b *BucketStore) ListBuckets() ([]db.Bucket, error) {
 	}
 	return buckets, nil
 }
+
+func (b *BucketStore) FindBucketByName(name string) (*db.Bucket, error) {
+	var bucket db.Bucket
+	result := b.db.Where("name = ?", name).First(&bucket)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &bucket, nil
+}
+
+func (b *BucketStore) CheckExists(name string) (bool, error) {
+	result := b.db.Where("name = ?", name).First(&db.Bucket{})
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			return false, nil
+		}
+		return false, result.Error
+	}
+	return true, nil
+}

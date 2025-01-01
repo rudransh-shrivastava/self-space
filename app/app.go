@@ -24,10 +24,10 @@ func (a *ApiServer) Start() {
 	utils.CreateDirectoryIfNotExists(config.Envs.BucketPath)
 
 	r := mux.NewRouter()
-	bucket := api.Bucket{}
+	bucketStore := api.NewBucketStore(a.db)
+	bucket := api.Bucket{BucketStore: bucketStore}
 
 	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Upload).Methods("PUT")
-
 	addr := fmt.Sprintf("%s:%s", config.Envs.PublicHost, config.Envs.Port)
 
 	fmt.Printf("listening on %s \n", addr)

@@ -16,6 +16,7 @@ func NewSuccessResponse(w http.ResponseWriter, msg string) {
 	w.Write([]byte(msg))
 }
 
+// format: foo/bar/baz NOT /foo/bar/baz
 func CreateDirectoryIfNotExists(path string) {
 	paths := strings.Split(path, "/")
 	createDir(paths)
