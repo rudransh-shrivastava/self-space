@@ -9,13 +9,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var RootCmd = &cobra.Command{
-	Use:   "self-space",
-	Short: "self-space - is a ",
-	Long: `self-space is a >>>>>>>>
-	<<<<<
-	>>>>>
-	<<<<<`,
+var rootCmd = &cobra.Command{
+	Use:  "self-space",
+	Long: `self-space is a self hosted cloud storage service`,
 	Run: func(cmd *cobra.Command, args []string) {
 		db, err := db.NewDB()
 		if err != nil {
@@ -28,8 +24,12 @@ var RootCmd = &cobra.Command{
 }
 
 func Execute() {
-	if err := RootCmd.Execute(); err != nil {
+	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error while executing'%s'", err)
 		os.Exit(1)
 	}
+}
+
+func init() {
+	rootCmd.AddCommand(bucketCmd)
 }
