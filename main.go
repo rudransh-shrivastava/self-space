@@ -2,25 +2,17 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
-	"github.com/gorilla/mux"
-	"github.com/rudransh-shrivastava/self-space/api"
-	"github.com/rudransh-shrivastava/self-space/config"
-	"github.com/rudransh-shrivastava/self-space/utils"
+	"github.com/rudransh-shrivastava/self-space/app"
+	"github.com/rudransh-shrivastava/self-space/db"
 )
 
 func main() {
-	// create buckets storage directory
-	utils.CreateDirectoryIfNotExists(config.Envs.BucketPath)
-
-	r := mux.NewRouter()
-	bucket := api.Bucket{}
-
-	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Upload).Methods("PUT")
-
-	addr := fmt.Sprintf("%s:%s", config.Envs.PublicHost, config.Envs.Port)
-
-	fmt.Printf("listening on %s \n", addr)
-	http.ListenAndServe(addr, r)
+	db, err := db.NewDB()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	apiServer := app.NewApiServer(db)
+	apiServer.Start()
 }

@@ -1,4 +1,11 @@
-buckets
-bin
 .env
 tmp
+
+# sqlite db
+apikeys.db
+
+# buckets directory
+buckets
+
+# build
+bin
