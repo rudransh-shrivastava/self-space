@@ -5,6 +5,14 @@ import (
 	"gorm.io/gorm"
 )
 
+type Permission string
+
+const (
+	READ   Permission = "READ"
+	WRITE  Permission = "WRITE"
+	DELETE Permission = "DELETE"
+)
+
 type APIKey struct {
 	ID  uint   `gorm:"primaryKey"`
 	Key string `gorm:"unique"`
@@ -13,6 +21,15 @@ type APIKey struct {
 type Bucket struct {
 	ID   uint   `gorm:"primaryKey"`
 	Name string `gorm:"unique"`
+}
+
+type APIKeyBucketPermission struct {
+	ID        uint       `gorm:"primaryKey"`
+	APIKeyID  uint       `gorm:"not null"`
+	APIKey    APIKey     `gorm:"constraint:OnDelete:CASCADE"`
+	BucketID  uint       `gorm:"not null"`
+	Bucket    Bucket     `gorm:"constraint:OnDelete:CASCADE"`
+	Permision Permission `gorm:"not null"`
 }
 
 func NewDB() (*gorm.DB, error) {
