@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"net/http"
 	"os"
 	"strings"
@@ -29,4 +31,16 @@ func createDir(paths []string) {
 			os.Mkdir(dirPath, 0755)
 		}
 	}
+}
+
+func GenerateAPIKey() (string, error) {
+	keyLength := 32
+
+	key := make([]byte, keyLength)
+	_, err := rand.Read(key)
+	if err != nil {
+		return "", err
+	}
+	apiKey := base64.URLEncoding.EncodeToString(key)
+	return apiKey, nil
 }
