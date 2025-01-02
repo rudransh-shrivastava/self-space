@@ -1,4 +1,4 @@
-package api
+package bucket
 
 import (
 	"fmt"
@@ -23,12 +23,8 @@ func (b *Bucket) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exists, err := b.BucketStore.CheckExists(bucketName)
+	_, err := b.BucketStore.FindBucketByName(bucketName)
 	if err != nil {
-		utils.NewErrorResponse(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if !exists {
 		utils.NewErrorResponse(w, "bucket does not exist", http.StatusNotFound)
 		return
 	}

@@ -1,4 +1,4 @@
-package api
+package bucket
 
 import (
 	"fmt"
@@ -42,15 +42,4 @@ func (b *BucketStore) FindBucketByName(name string) (*db.Bucket, error) {
 		return nil, result.Error
 	}
 	return &bucket, nil
-}
-
-func (b *BucketStore) CheckExists(name string) (bool, error) {
-	result := b.db.Where("name = ?", name).First(&db.Bucket{})
-	if result.Error != nil {
-		if result.Error == gorm.ErrRecordNotFound {
-			return false, nil
-		}
-		return false, result.Error
-	}
-	return true, nil
 }
