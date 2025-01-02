@@ -3,11 +3,10 @@ package cmd
 import (
 	"fmt"
 
-	api "github.com/rudransh-shrivastava/self-space/api/api_key"
+	"github.com/rudransh-shrivastava/self-space/api/apikey"
 	"github.com/rudransh-shrivastava/self-space/db"
 	"github.com/rudransh-shrivastava/self-space/utils"
 	"github.com/spf13/cobra"
-	"golang.org/x/crypto/bcrypt"
 )
 
 var apikeyCreateCmd = &cobra.Command{
@@ -19,13 +18,13 @@ var apikeyCreateCmd = &cobra.Command{
 			fmt.Println(err)
 			return
 		}
-		apiKeyStore := api.NewAPIKeyStore(db)
+		apiKeyStore := apikey.NewAPIKeyStore(db)
 		apikey, err := utils.GenerateAPIKey()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		hashedApiKey, err := bcrypt.GenerateFromPassword([]byte(apikey), bcrypt.DefaultCost)
+		hashedApiKey, err := utils.HashKey(apikey)
 		if err != nil {
 			fmt.Println(err)
 			return

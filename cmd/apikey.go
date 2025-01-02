@@ -10,4 +10,5 @@ var apikeyCmd = &cobra.Command{
 func init() {
 	apikeyCmd.AddCommand(apikeyCreateCmd)
 	apikeyCmd.AddCommand(apikeyListCmd)
+	apikeyCmd.AddCommand(apikeyAttachCmd)
 }
