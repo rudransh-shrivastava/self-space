@@ -1,6 +1,8 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/rudransh-shrivastava/self-space/db"
 	"gorm.io/gorm"
 )
@@ -18,6 +20,7 @@ func (b *BucketStore) CreateBucket(name string) error {
 	bucket := db.Bucket{Name: name}
 	result := b.db.Create(&bucket)
 	if result.Error != nil {
+		fmt.Println("bucket with that name already exists")
 		return result.Error
 	}
 	return nil
