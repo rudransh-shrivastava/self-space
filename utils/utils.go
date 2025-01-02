@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func NewErrorResponse(w http.ResponseWriter, msg string, status int) {
@@ -43,4 +45,12 @@ func GenerateAPIKey() (string, error) {
 	}
 	apiKey := base64.URLEncoding.EncodeToString(key)
 	return apiKey, nil
+}
+
+func HashKey(key string) (string, error) {
+	hashedKey, err := bcrypt.GenerateFromPassword([]byte(key), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hashedKey), nil
 }

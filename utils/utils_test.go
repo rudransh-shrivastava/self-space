@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -17,5 +18,11 @@ func TestGenerateAPIKey(t *testing.T) {
 		if len(apiKey) != expectedLength {
 			t.Errorf("api key not of expected length, apikey: %v has length %d", apiKey, len(apiKey))
 		}
+		fmt.Printf("api key %s\n", apiKey)
+		hashedKey, err := HashKey(apiKey)
+		if err != nil {
+			t.Errorf("error hashing key %s", apiKey)
+		}
+		fmt.Printf("hashed key %s\n", hashedKey)
 	}
 }
