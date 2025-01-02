@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type ApiKey struct {
+type APIKey struct {
 	ID  uint   `gorm:"primaryKey"`
 	Key string `gorm:"unique"`
 }
@@ -20,7 +20,7 @@ func NewDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&ApiKey{})
+	err = db.AutoMigrate(&APIKey{})
 	if err != nil {
 		return nil, err
 	}
