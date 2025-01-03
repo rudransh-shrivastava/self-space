@@ -32,12 +32,12 @@ func AuthMiddleware(apiKeyStore *apikey.APIKeyStore, bucketStore *bucket.BucketS
 			// validate bucket name
 			bucketName, ok := mux.Vars(r)["bucketName"]
 			if !ok || bucketName == "" {
-				utils.NewErrorResponse(w, "bucket name is required", http.StatusBadRequest)
+				utils.NewErrorResponse(w, "Bucket name is required", http.StatusBadRequest)
 				return
 			}
 			dbBucket, err := bucketStore.FindBucketByName(bucketName)
 			if err != nil {
-				utils.NewErrorResponse(w, "bucket does not exist", http.StatusNotFound)
+				utils.NewErrorResponse(w, "Bucket does not exist", http.StatusNotFound)
 				return
 			}
 			// validate permissions
@@ -50,7 +50,7 @@ func AuthMiddleware(apiKeyStore *apikey.APIKeyStore, bucketStore *bucket.BucketS
 			case http.MethodDelete:
 				permission = "DELETE"
 			default:
-				utils.NewErrorResponse(w, "method not allowed", http.StatusMethodNotAllowed)
+				utils.NewErrorResponse(w, "Method not allowed", http.StatusMethodNotAllowed)
 			}
 
 			hasPermission := false
@@ -58,18 +58,18 @@ func AuthMiddleware(apiKeyStore *apikey.APIKeyStore, bucketStore *bucket.BucketS
 			hasPermission, err = apiKeyBucketPermissionStore.HasPermission(dbApiKey, dbBucket, permission)
 
 			if err != nil {
-				utils.NewErrorResponse(w, "error while checking permissions", http.StatusInternalServerError)
+				utils.NewErrorResponse(w, "Error while checking permissions", http.StatusInternalServerError)
 				return
 			}
 			if !hasPermission {
-				utils.NewErrorResponse(w, "permission denied", http.StatusForbidden)
+				utils.NewErrorResponse(w, "Permission denied", http.StatusForbidden)
 				return
 			}
 
 			// set headers for fileName and filePath
 			urlFullPath, ok := mux.Vars(r)["filePath"]
 			if !ok || urlFullPath == "" {
-				utils.NewErrorResponse(w, "file path is required", http.StatusBadRequest)
+				utils.NewErrorResponse(w, "File path is required", http.StatusBadRequest)
 				return
 			}
 
