@@ -39,11 +39,19 @@ func GenerateAPIKey() (string, error) {
 	keyLength := 32
 
 	key := make([]byte, keyLength)
-	_, err := rand.Read(key)
-	if err != nil {
-		return "", err
+	generated := false
+	var apiKey string
+	for !generated {
+		_, err := rand.Read(key)
+		if err != nil {
+			return "", err
+		}
+		apiKey = base64.URLEncoding.EncodeToString(key)
+		if apiKey[0] != '-' {
+			generated = true
+		}
 	}
-	apiKey := base64.URLEncoding.EncodeToString(key)
+
 	return apiKey, nil
 }
 
