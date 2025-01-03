@@ -14,8 +14,7 @@ type APIKeyStore struct {
 }
 
 // testing api key
-// NYRKv7XgqUnh-FBhuR4U10LT5KW1qdxNtFt-xFOeLRc=
-// Rr0xXZEJyv3GN5LTS9Nwde0wKxa9ayGI_nzS6SADmTE=
+// H00fy7Q0_5ErxKL8-Ot48NvjRO82ZQKXSH_4TuJ67NE=
 func NewAPIKeyStore(db *gorm.DB) *APIKeyStore {
 	return &APIKeyStore{db: db}
 }

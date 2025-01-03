@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rudransh-shrivastava/self-space/api/apikey"
 	api "github.com/rudransh-shrivastava/self-space/api/bucket"
 	"github.com/rudransh-shrivastava/self-space/config"
+	"github.com/rudransh-shrivastava/self-space/middleware"
 	"github.com/rudransh-shrivastava/self-space/utils"
 	"gorm.io/gorm"
 )
@@ -24,8 +26,13 @@ func (a *ApiServer) Start() {
 	utils.CreateDirectoryIfNotExists(config.Envs.BucketPath)
 
 	r := mux.NewRouter()
+
 	bucketStore := api.NewBucketStore(a.db)
 	bucket := api.Bucket{BucketStore: bucketStore}
+
+	apiKeyStore := apikey.NewAPIKeyStore(a.db)
+
+	r.Use(middleware.ApiKeyMiddleware(apiKeyStore))
 
 	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Upload).Methods("PUT")
 	addr := fmt.Sprintf("%s:%s", config.Envs.PublicHost, config.Envs.Port)
