@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	api "github.com/rudransh-shrivastava/self-space/api/bucket"
+	"github.com/rudransh-shrivastava/self-space/config"
 	"github.com/rudransh-shrivastava/self-space/db"
 	"github.com/spf13/cobra"
 )
@@ -14,11 +15,7 @@ var bucketCreateCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		bucketName := args[0]
-		if bucketName == "" {
-			fmt.Println("bucket name cannot be empty")
-			return
-		}
-		if len(bucketName) > 100 {
+		if len(bucketName) > config.Envs.BucketNameMaxLength {
 			fmt.Println("bucket name cannot be more than 100 characters")
 		}
 
