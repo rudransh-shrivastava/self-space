@@ -121,3 +121,24 @@ func (b *Bucket) Download(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+func (b *Bucket) Delete(w http.ResponseWriter, r *http.Request) {
+	bucketName := mux.Vars(r)["bucketName"]
+	filePath := r.Header.Get("filePath")
+	fileName := r.Header.Get("fileName")
+
+	fullFilePath := config.Envs.BucketPath + bucketName + "/" + filePath + "/" + fileName
+
+	if _, err := os.Stat(fullFilePath); os.IsNotExist(err) {
+		utils.NewErrorResponse(w, "File does not exist", http.StatusNotFound)
+		return
+	}
+
+	err := os.Remove(fullFilePath)
+	if err != nil {
+		utils.NewErrorResponse(w, fmt.Sprintf("Failed to delete file: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	utils.NewSuccessResponse(w, fmt.Sprintf("File deleted successfully: %s", fullFilePath))
+}

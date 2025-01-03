@@ -39,6 +39,7 @@ func (a *ApiServer) Start() {
 
 	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Upload).Methods("PUT")
 	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Download).Methods("GET")
+	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Delete).Methods("DELETE")
 
 	addr := fmt.Sprintf("%s:%s", config.Envs.PublicHost, config.Envs.Port)
 
