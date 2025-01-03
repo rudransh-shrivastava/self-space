@@ -1,8 +1,8 @@
 build:
-	go build -o bin/app
+	go build -o bin/self-space
 
 run: build
-	./bin/app
+	./bin/self-space
 
 test:
 	go test -v ./... -count=1
