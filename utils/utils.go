@@ -54,3 +54,11 @@ func HashKey(key string) (string, error) {
 	}
 	return string(hashedKey), nil
 }
+
+func DeleteDirectory(path string) error {
+	err := os.RemoveAll(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
