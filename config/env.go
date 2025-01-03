@@ -9,10 +9,11 @@ import (
 )
 
 type Config struct {
-	PublicHost string
-	Port       string
-	BucketPath string
-	BufferSize int
+	PublicHost          string
+	Port                string
+	BucketPath          string
+	BufferSize          int
+	BucketNameMaxLength int
 }
 
 var Envs = initConfig()
@@ -20,10 +21,11 @@ var Envs = initConfig()
 func initConfig() Config {
 	godotenv.Load()
 	return Config{
-		PublicHost: getEnv("PUBLIC_HOST", "localhost"),
-		Port:       getEnv("PORT", "8080"),
-		BucketPath: getEnv("BUCKET_PATH", "buckets/"),
-		BufferSize: getEnvInt("BUFFER_SIZE", 1024),
+		PublicHost:          getEnv("PUBLIC_HOST", "localhost"),
+		Port:                getEnv("PORT", "8080"),
+		BucketPath:          getEnv("BUCKET_PATH", "buckets/"),
+		BufferSize:          getEnvInt("BUFFER_SIZE", 1024),
+		BucketNameMaxLength: getEnvInt("BUCKET_NAME_MAX_LENGTH", 100),
 	}
 }
 
