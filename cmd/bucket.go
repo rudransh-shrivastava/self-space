@@ -12,4 +12,5 @@ var bucketCmd = &cobra.Command{
 func init() {
 	bucketCmd.AddCommand(bucketCreateCmd)
 	bucketCmd.AddCommand(bucketListCmd)
+	bucketCmd.AddCommand(bucketDeleteCmd)
 }

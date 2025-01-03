@@ -16,7 +16,6 @@ func NewBucketStore(db *gorm.DB) *BucketStore {
 }
 
 func (b *BucketStore) CreateBucket(name string) error {
-	// create bucket here
 	bucket := db.Bucket{Name: name}
 	result := b.db.Create(&bucket)
 	if result.Error != nil {
@@ -42,4 +41,13 @@ func (b *BucketStore) FindBucketByName(name string) (*db.Bucket, error) {
 		return nil, result.Error
 	}
 	return &bucket, nil
+}
+
+func (b *BucketStore) DeleteBucket(name string) error {
+	var bucket db.Bucket
+	result := b.db.Where("name = ?", name).Delete(&bucket)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
