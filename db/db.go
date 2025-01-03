@@ -24,12 +24,12 @@ type Bucket struct {
 }
 
 type APIKeyBucketPermission struct {
-	ID        uint       `gorm:"primaryKey"`
-	APIKeyID  uint       `gorm:"not null"`
-	APIKey    APIKey     `gorm:"constraint:OnDelete:CASCADE"`
-	BucketID  uint       `gorm:"not null"`
-	Bucket    Bucket     `gorm:"constraint:OnDelete:CASCADE"`
-	Permision Permission `gorm:"not null"`
+	ID         uint       `gorm:"primaryKey"`
+	APIKeyID   uint       `gorm:"not null;foreignKey:APIKeyID;constraint:OnDelete:CASCADE"`
+	APIKey     APIKey     `gorm:"constraint:OnDelete:CASCADE"`
+	BucketID   uint       `gorm:"not null;foreignKey:BucketID;constraint:OnDelete:CASCADE"`
+	Bucket     Bucket     `gorm:"constraint:OnDelete:CASCADE"`
+	Permission Permission `gorm:"not null"`
 }
 
 func NewDB() (*gorm.DB, error) {
