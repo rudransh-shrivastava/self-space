@@ -33,9 +33,13 @@ func (a *ApiServer) Start() {
 
 	apiKeyStore := apikey.NewAPIKeyStore(a.db)
 	apiKeyBucketPermissionStore := apikeybucketpermission.NewAPIKeyBucketPermissionStore(a.db)
+
+	// use middleware
 	r.Use(middleware.AuthMiddleware(apiKeyStore, bucketStore, apiKeyBucketPermissionStore))
 
 	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Upload).Methods("PUT")
+	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Download).Methods("GET")
+
 	addr := fmt.Sprintf("%s:%s", config.Envs.PublicHost, config.Envs.Port)
 
 	fmt.Printf("listening on %s \n", addr)

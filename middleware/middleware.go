@@ -76,7 +76,6 @@ func AuthMiddleware(apiKeyStore *apikey.APIKeyStore, bucketStore *bucket.BucketS
 			pathArray := strings.Split(urlFullPath, "/")
 			fileName := pathArray[len(pathArray)-1]
 			filePath := strings.Join(pathArray[:len(pathArray)-1], "/")
-
 			// set headers
 			r.Header.Set("fileName", fileName)
 			r.Header.Set("filePath", filePath)
