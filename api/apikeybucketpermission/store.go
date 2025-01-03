@@ -15,9 +15,9 @@ func NewAPIKeyBucketPermissionStore(db *gorm.DB) *APIKeyBucketPermissionStore {
 
 func (a *APIKeyBucketPermissionStore) CreateAPIKeyBucketPermission(apiKeyID, bucketID uint, permission string) error {
 	apiKeyBucketPermission := db.APIKeyBucketPermission{
-		APIKeyID:  apiKeyID,
-		BucketID:  bucketID,
-		Permision: db.Permission(permission),
+		APIKeyID:   apiKeyID,
+		BucketID:   bucketID,
+		Permission: db.Permission(permission),
 	}
 	result := a.db.Create(&apiKeyBucketPermission)
 	if result.Error != nil {
@@ -27,5 +27,14 @@ func (a *APIKeyBucketPermissionStore) CreateAPIKeyBucketPermission(apiKeyID, buc
 }
 
 func (a *APIKeyBucketPermissionStore) HasPermission(apiKey *db.APIKey, bucket *db.Bucket, permission string) (bool, error) {
+	apiKeyBucketPermission := db.APIKeyBucketPermission{}
+	// find apikeybucketpermisssion where APIKey = apikey and Bucket = bucket and Pemission = permission
+	result := a.db.Where("api_key_id = ? AND bucket_id = ? AND permission = ?", apiKey.ID, bucket.ID, db.Permission(permission)).First(&apiKeyBucketPermission)
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			return false, nil
+		}
+		return false, result.Error
+	}
 	return true, nil
 }

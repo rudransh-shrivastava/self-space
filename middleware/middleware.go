@@ -63,6 +63,7 @@ func AuthMiddleware(apiKeyStore *apikey.APIKeyStore, bucketStore *bucket.BucketS
 			}
 			if !hasPermission {
 				utils.NewErrorResponse(w, "permission denied", http.StatusForbidden)
+				return
 			}
 
 			// set headers for fileName and filePath
