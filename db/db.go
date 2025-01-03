@@ -33,11 +33,17 @@ type APIKeyBucketPermission struct {
 }
 
 func NewDB() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{
+		PrepareStmt: true,
+	})
 	if err != nil {
 		return nil, err
 	}
+	sqlDB, err := db.DB()
+	sqlDB.Exec("PRAGMA foreign_keys = ON")
+
 	err = db.AutoMigrate(&APIKey{}, &Bucket{}, &APIKeyBucketPermission{})
+
 	if err != nil {
 		return nil, err
 	}
