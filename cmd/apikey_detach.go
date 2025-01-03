@@ -11,11 +11,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var apikeyAttachCmd = &cobra.Command{
-	Use:   "attach <api-key> <bucket-name> <permission>",
-	Short: "attach a bucket to an api key",
-	Long: `attach a bucket to an api key with a given permission
-	Usage: self-space apikey attach <api-key> <bucket-name> <permission>
+var apikeyDetachCmd = &cobra.Command{
+	Use:   "detach <api-key> <bucket-name> <permission>",
+	Short: "detach a bucket from an api key",
+	Long: `detach a bucket from an api key completely or a given permission
+	Usage: self-space apikey detach <api-key> <bucket-name> <permission>
 	Permission can be one of (READ, WRITE, DELETE)`,
 	Args: cobra.ExactArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -46,11 +46,11 @@ var apikeyAttachCmd = &cobra.Command{
 		}
 		// attach bucket to api key
 		apiKeyBucketPermissionStore := apikeybucketpermission.NewAPIKeyBucketPermissionStore(db)
-		err = apiKeyBucketPermissionStore.CreateAPIKeyBucketPermission(dbApiKey.ID, dbBucket.ID, permission)
+		err = apiKeyBucketPermissionStore.DeletePermission(dbApiKey, dbBucket, permission)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		fmt.Printf("attached bucket %s to api key %s with permission %s\n", bucketName, apiKey, permission)
+		fmt.Printf("detached bucket %s from api key %s with permission %s\n", bucketName, apiKey, permission)
 	},
 }

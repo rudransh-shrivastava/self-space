@@ -50,3 +50,24 @@ func (a *APIKeyStore) ListAPIKeys() ([]db.APIKey, error) {
 	}
 	return apiKeys, nil
 }
+
+func (a *APIKeyStore) DeleteAPIKeyByKey(key string) error {
+	apiKeys := []db.APIKey{}
+
+	result := a.db.Find(&apiKeys)
+
+	if result.Error != nil {
+		return result.Error
+	}
+	for _, apiKey := range apiKeys {
+		err := bcrypt.CompareHashAndPassword([]byte(apiKey.Key), []byte(key))
+		if err == nil {
+			result := a.db.Delete(&apiKey)
+			if result.Error != nil {
+				return result.Error
+			}
+			return nil
+		}
+	}
+	return errors.New("API key not found")
+}
