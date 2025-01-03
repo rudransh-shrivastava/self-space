@@ -25,3 +25,7 @@ func (a *APIKeyBucketPermissionStore) CreateAPIKeyBucketPermission(apiKeyID, buc
 	}
 	return nil
 }
+
+func (a *APIKeyBucketPermissionStore) HasPermission(apiKey *db.APIKey, bucket *db.Bucket, permission string) (bool, error) {
+	return true, nil
+}

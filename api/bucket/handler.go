@@ -5,7 +5,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/rudransh-shrivastava/self-space/config"
@@ -17,31 +16,14 @@ type Bucket struct {
 }
 
 func (b *Bucket) Upload(w http.ResponseWriter, r *http.Request) {
-	bucketName, ok := mux.Vars(r)["bucketName"]
-	if !ok || bucketName == "" {
-		utils.NewErrorResponse(w, "bucket name is required", http.StatusBadRequest)
-		return
-	}
-
-	_, err := b.BucketStore.FindBucketByName(bucketName)
-	if err != nil {
-		utils.NewErrorResponse(w, "bucket does not exist", http.StatusNotFound)
-		return
-	}
-
-	fullFilePath, ok := mux.Vars(r)["filePath"]
-	if !ok || fullFilePath == "" {
-		utils.NewErrorResponse(w, "file path is required", http.StatusBadRequest)
-		return
-	}
-
-	pathArray := strings.Split(fullFilePath, "/")
-	fileName := pathArray[len(pathArray)-1]
-	filePath := strings.Join(pathArray[:len(pathArray)-1], "/")
+	bucketName := mux.Vars(r)["bucketName"]
+	filePath := r.Header.Get("filePath")
+	fileName := r.Header.Get("fileName")
 
 	utils.CreateDirectoryIfNotExists(config.Envs.BucketPath + bucketName + "/" + filePath)
 
-	finalFilePath := config.Envs.BucketPath + bucketName + "/" + filePath + "/" + fileName
+	fullFilePath := filePath + "/" + fileName
+	finalFilePath := config.Envs.BucketPath + bucketName + "/" + fullFilePath
 
 	outFile, err := os.Create(finalFilePath)
 	if err != nil {
@@ -84,5 +66,5 @@ func (b *Bucket) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.NewSuccessResponse(w, fmt.Sprintf("File uploaded successfully to: %s/%s with size %d", bucketName, fullFilePath, totalBytes))
+	utils.NewSuccessResponse(w, fmt.Sprintf("File uploaded successfully \nbucket: %s \npath: %s \nsize: %d", bucketName, fullFilePath, totalBytes))
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/rudransh-shrivastava/self-space/api/apikey"
+	"github.com/rudransh-shrivastava/self-space/api/apikeybucketpermission"
 	api "github.com/rudransh-shrivastava/self-space/api/bucket"
 	"github.com/rudransh-shrivastava/self-space/config"
 	"github.com/rudransh-shrivastava/self-space/middleware"
@@ -31,8 +32,8 @@ func (a *ApiServer) Start() {
 	bucket := api.Bucket{BucketStore: bucketStore}
 
 	apiKeyStore := apikey.NewAPIKeyStore(a.db)
-
-	r.Use(middleware.ApiKeyMiddleware(apiKeyStore))
+	apiKeyBucketPermissionStore := apikeybucketpermission.NewAPIKeyBucketPermissionStore(a.db)
+	r.Use(middleware.AuthMiddleware(apiKeyStore, bucketStore, apiKeyBucketPermissionStore))
 
 	r.HandleFunc("/bucket/{bucketName}/{filePath:.*}", bucket.Upload).Methods("PUT")
 	addr := fmt.Sprintf("%s:%s", config.Envs.PublicHost, config.Envs.Port)
